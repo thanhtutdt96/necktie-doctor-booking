@@ -1,7 +1,7 @@
 import { FC, memo, useMemo } from "react";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
-import NecktieAvatar from "components/Common/NecktieAvatar";
+import NecktieAvatar from "components/common/NecktieAvatar";
 import useNecktieHelper from "hooks/useNecktieHelper";
 import { Doctor } from "types/Doctor";
 

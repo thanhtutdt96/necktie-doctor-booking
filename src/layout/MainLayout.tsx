@@ -1,5 +1,5 @@
 import { Outlet } from "react-router";
-import NecktieNavbar from "components/Common/NecktieNavbar";
+import NecktieNavbar from "components/common/NecktieNavbar";
 const MainLayout = () => {
   return (
     <div className="App">

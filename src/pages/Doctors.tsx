@@ -1,12 +1,12 @@
-import { createRef, lazy, useEffect, useState } from "react";
-import NecktieLoader from "components/Common/NecktieLoader";
-import NecktieModal from "components/Common/NecktieModal";
-import DoctorBookingProcedure from "components/Doctor/DoctorBookingProcedure";
-import DoctorItem from "components/Doctor/DoctorItem";
+import { createRef, lazy, useState } from "react";
+import NecktieLoader from "components/common/NecktieLoader";
+import NecktieModal from "components/common/NecktieModal";
+import DoctorItem from "components/doctor/DoctorItem";
+import DoctorBookingProcedure from "components/doctor/doctor-booking-procedure";
 import { useGetDoctorsQuery } from "redux/services/necktieApi";
 import useDebounceValue from "hooks/useDebounceValue";
 
-const Toast = lazy(() => import("components/Common/Toast"));
+const Toast = lazy(() => import("components/common/Toast"));
 
 const Doctors = () => {
   const { data: doctors, isLoading } = useGetDoctorsQuery();

@@ -1,6 +1,6 @@
 import { lazy } from "react";
 
-const Toast = lazy(() => import("components/Common/Toast"));
+const Toast = lazy(() => import("components/common/Toast"));
 
 const MyBookings = () => {
   return (

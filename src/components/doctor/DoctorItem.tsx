@@ -19,7 +19,7 @@ const DoctorItem: FC<Props> = ({ name, description, address, onPrimaryButtonClic
   const avatarColor = useMemo(() => stringToColor(name), [name, stringToColor]);
 
   return (
-    <div className="card md:w-[250px] bg-base-100 w-full border shadow-lg transition duration-300 ease-in-out hover:cursor-pointer hover:shadow-xl hover:ring-neutral-content hover:ring-1 hover:-translate-y-0.5">
+    <div className="sliderup card md:w-[250px] bg-base-100 w-full border shadow-lg transition duration-300 ease-in-out hover:cursor-pointer hover:shadow-xl hover:ring-neutral-content hover:ring-1 hover:-translate-y-0.5">
       <figure className="px-2 pt-2">
         <div className="bg-neutral-content/30 rounded-xl flex-1 flex items-center p-3">
           <NecktieAvatar

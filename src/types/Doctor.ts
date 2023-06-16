@@ -25,7 +25,9 @@ export interface DoctorScheduleDateItem {
   day: string;
 }
 
-export type DoctorScheduleTimeItem = Pick<DoctorOpeningHour, "start" | "end"> & {
+export type DoctorScheduleTimeItem = {
+  start: number;
+  end: number;
   displayStartTime: string;
   displayEndTime: string;
   isPast: boolean;

@@ -11,7 +11,8 @@ export enum NecktieApiTagType {
 export enum DoctorBookingStep {
   FILL = "fill",
   APPOINTMENT = "appointment",
-  REVIEW = "review"
+  REVIEW = "review",
+  DONE = "done",
 }
 
 export interface StepperStep {

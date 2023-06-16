@@ -36,7 +36,10 @@ const NecktieNavbar = () => {
           <ul className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
             {navbarItems.map((item, index) => (
               <li key={index}>
-                <NavLink className={({ isActive }) => (isActive ? "active" : "")} to={item.path}>
+                <NavLink
+                  className={({ isActive }) => (isActive ? "active text-white" : "")}
+                  to={item.path}
+                >
                   {item.label}
                 </NavLink>
               </li>
@@ -52,7 +55,10 @@ const NecktieNavbar = () => {
         <ul className="menu menu-horizontal px-1">
           {navbarItems.map((item, index) => (
             <li key={index}>
-              <NavLink className={({ isActive }) => (isActive ? "active" : "")} to={item.path}>
+              <NavLink
+                className={({ isActive }) => (isActive ? "active text-white" : "")}
+                to={item.path}
+              >
                 {item.label}
               </NavLink>
             </li>

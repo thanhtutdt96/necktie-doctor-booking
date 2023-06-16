@@ -9,6 +9,6 @@ export interface BookingFormData {
   id?: string;
   name?: Booking["name"];
   doctorId?: Booking["doctorId"];
-  start?: Booking["start"];
+  start?: number;
   date?: Booking["date"];
 }

@@ -2,6 +2,7 @@ import { Dispatch, FC, SetStateAction, useMemo, useState } from "react";
 import Calendar from "react-calendar";
 import { CalendarIcon } from "@heroicons/react/24/solid";
 import NecktieAvatar from "components/common/NecktieAvatar";
+import FieldWrapper from "components/doctor/common/FieldWrapper";
 import FormActions from "components/doctor/doctor-booking-procedure/common/FormActions";
 import ScheduleItem from "components/doctor/doctor-booking-procedure/common/ScheduleItem";
 import useDateTimeHelper from "hooks/useDateTimeHelper";
@@ -40,7 +41,7 @@ const DoctorBookingStepAppointment: FC<Props> = ({
     getDefaultSelectedDate(currentFormData.date ? currentFormData.date : new Date())
   );
   const [selectedHour, setSelectedHour] = useState(
-    currentFormData.start ? currentFormData.start : ""
+    currentFormData.start ? currentFormData.start : undefined
   );
 
   const initials = useMemo(
@@ -109,19 +110,18 @@ const DoctorBookingStepAppointment: FC<Props> = ({
 
   const handleCalendarChange = (value: Date) => {
     setSelectedDate(getDefaultSelectedDate(value));
-    setSelectedHour("");
+    setSelectedHour(undefined);
     toggleModal(false);
   };
 
   const handleDateItemClick = (date: DoctorScheduleDateItem) => {
     setSelectedDate(date);
-    setSelectedHour("");
+    setSelectedHour(undefined);
   };
 
   return (
-    <div>
-      <div className="mb-4">
-        <h4 className="text-md mb-1 font-medium">Selected Doctor:</h4>
+    <>
+      <FieldWrapper label="Selected doctor:">
         <div className="flex items-center">
           <NecktieAvatar
             className="w-8"
@@ -131,23 +131,22 @@ const DoctorBookingStepAppointment: FC<Props> = ({
           />
           <span className="text-sm ml-2 font-medium">{doctorName}</span>
         </div>
-      </div>
+      </FieldWrapper>
 
-      <div className="mb-4">
-        <h4 className="text-md mb-1 font-medium">Working time:</h4>
-        <p className="text-sm mb-1">
+      <FieldWrapper label="Working time:">
+        <p className="text-sm">
           {startWorkingDay} - {endWorkingDay} ({startWorkingHour}-{endWorkingHour})
         </p>
-      </div>
+      </FieldWrapper>
 
-      <div className="mb-4">
-        <div className="flex justify-between mb-2">
-          <h4 className="text-md font-medium">Schedule:</h4>
+      <FieldWrapper
+        label="Schedule:"
+        labelRight={
           <button onClick={() => toggleModal()}>
             <CalendarIcon className="w-5" />
           </button>
-        </div>
-
+        }
+      >
         <div className="relative mb-3">
           {isCalendarVisible ? (
             <Calendar
@@ -205,7 +204,7 @@ const DoctorBookingStepAppointment: FC<Props> = ({
             </>
           )}
         </div>
-      </div>
+      </FieldWrapper>
 
       <FormActions
         isFormValid={isFormValid}
@@ -213,7 +212,7 @@ const DoctorBookingStepAppointment: FC<Props> = ({
         handleNextStep={handleNextStep}
         className="fixed left-6 right-6 bottom-4"
       />
-    </div>
+    </>
   );
 };
 

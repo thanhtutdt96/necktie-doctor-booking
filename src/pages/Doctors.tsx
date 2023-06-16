@@ -2,12 +2,12 @@ import { lazy, useCallback, useMemo, useState } from "react";
 import NecktieLoader from "components/common/NecktieLoader";
 import NecktieModal from "components/common/NecktieModal";
 import DoctorItem from "components/doctor/DoctorItem";
+import DoctorBookingProcedure from "components/doctor/doctor-booking-procedure";
 import { useGetDoctorsQuery } from "redux/services/necktieApi";
 import useDebounceValue from "hooks/useDebounceValue";
 import { Doctor } from "types/Doctor";
 
 const Toast = lazy(() => import("components/common/Toast"));
-const DoctorBookingProcedure = lazy(() => import("components/doctor/doctor-booking-procedure"));
 
 const Doctors = () => {
   const { data: doctors, isLoading } = useGetDoctorsQuery();
@@ -55,7 +55,11 @@ const Doctors = () => {
           </div>
         )}
 
-        {filteredDoctors.length && (
+        {searchTerm.length > 0 && filteredDoctors?.length === 0 && (
+          <p className="text-sm">No doctors found</p>
+        )}
+
+        {filteredDoctors?.length && (
           <div className="flex-col md:flex-row hero-content flex-wrap gap-y-6">
             {filteredDoctors.map((doctor) => (
               <DoctorItem
@@ -79,7 +83,7 @@ const Doctors = () => {
           </NecktieModal>
         )}
       </div>
-      <Toast />
+      {/*<Toast />*/}
     </>
   );
 };

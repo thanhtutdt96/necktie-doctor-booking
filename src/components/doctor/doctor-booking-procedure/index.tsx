@@ -1,9 +1,9 @@
 import { FC, useState } from "react";
 import NecktieStepper from "components/common/NecktieStepper";
 import DoctorBookingStepAppointment from "components/doctor/doctor-booking-procedure/steps/DoctorBookingStepAppointment";
+import DoctorBookingStepDone from "components/doctor/doctor-booking-procedure/steps/DoctorBookingStepDone";
 import DoctorBookingStepFill from "components/doctor/doctor-booking-procedure/steps/DoctorBookingStepFill";
 import DoctorBookingStepReview from "components/doctor/doctor-booking-procedure/steps/DoctorBookingStepReview";
-import { v4 as uuidv4 } from "uuid";
 import { BookingFormData } from "types/Booking";
 import { DoctorBookingStep } from "types/Common";
 import { Doctor } from "types/Doctor";
@@ -20,6 +20,10 @@ const bookingSteps = [
   {
     key: DoctorBookingStep.REVIEW,
     label: "Review"
+  },
+  {
+    key: DoctorBookingStep.DONE,
+    label: "Done"
   }
 ];
 
@@ -28,13 +32,12 @@ interface Props {
 }
 
 const DoctorBookingProcedure: FC<Props> = ({ doctor }) => {
-  const [currentStep, setCurrentStep] = useState(DoctorBookingStep.APPOINTMENT);
+  const [currentStep, setCurrentStep] = useState(DoctorBookingStep.FILL);
   const [currentFormData, setCurrentFormData] = useState<BookingFormData>({
     name: "",
-    doctorId: "",
-    start: "",
-    date: "",
-    id: uuidv4()
+    doctorId: doctor?.id,
+    start: undefined,
+    date: ""
   });
 
   return (
@@ -63,10 +66,11 @@ const DoctorBookingProcedure: FC<Props> = ({ doctor }) => {
         {currentStep === DoctorBookingStep.REVIEW && (
           <DoctorBookingStepReview
             currentFormData={currentFormData}
-            setCurrentFormData={setCurrentFormData}
             setCurrentStep={setCurrentStep}
+            doctorName={doctor?.name ?? ""}
           />
         )}
+        {currentStep === DoctorBookingStep.DONE && <DoctorBookingStepDone />}
       </div>
     </>
   );

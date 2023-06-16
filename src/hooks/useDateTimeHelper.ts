@@ -6,6 +6,8 @@ const DAY_LIMIT = 7;
 const DATE_FORMAT = "yyyy-MM-dd";
 const SHORT_DAY_FORMAT = "iii";
 const DAY_FORMAT = "dd";
+const DISPLAY_DATE_FORMAT = "MMM, dd, yyyy";
+
 export const HOUR_FORMAT = "HH.mm";
 const DISPLAY_HOUR_FORMAT = "hh:mmaaa";
 
@@ -22,6 +24,12 @@ const DAYS_OF_WEEK_SORTER: Record<string, number> = {
 };
 
 const useDateTimeHelper = () => {
+  const formatDisplayDate = (date: string | Date) => {
+    const dateValue = isDate(date) ? (date as Date) : new Date(date);
+
+    return format(dateValue, DISPLAY_DATE_FORMAT);
+  };
+
   const getDefaultSelectedDate = (date: string | Date) => {
     const dateValue = isDate(date) ? (date as Date) : new Date(date);
 
@@ -49,25 +57,26 @@ const useDateTimeHelper = () => {
   };
 
   const formatDisplayHour = (date: Date) => format(date, DISPLAY_HOUR_FORMAT);
+  const formatDisplayHourFromFloat = (inputHour: number) => {
+    const [hour, minute] = getHourMinuteArray(inputHour);
 
-  const formatHour = (date: Date) => format(date, DISPLAY_HOUR_FORMAT);
+    const date = new Date();
+
+    date.setHours(hour, minute);
+
+    return formatDisplayHour(date);
+  };
+
+  const formatHour = (date: Date) => format(date, HOUR_FORMAT);
 
   const getWorkingHours = (openingHours: Doctor["opening_hours"]) => {
     const maxStartOpeningHour = maxBy(openingHours, "start");
     const maxEndOpeningHour = maxBy(openingHours, "end");
 
-    const [startHour, startMinute] = getHourMinuteArray(
-      parseFloat(maxStartOpeningHour?.start ?? "")
-    );
-    const [endHour, endMinute] = getHourMinuteArray(parseFloat(maxEndOpeningHour?.start ?? ""));
-
-    const startDate = new Date();
-    const endDate = new Date();
-
-    startDate.setHours(startHour, startMinute);
-    endDate.setHours(endHour, endMinute);
-
-    return [formatDisplayHour(startDate), formatDisplayHour(endDate)];
+    return [
+      formatDisplayHourFromFloat(parseFloat(maxStartOpeningHour?.start ?? "")),
+      formatDisplayHourFromFloat(parseFloat(maxEndOpeningHour?.start ?? ""))
+    ];
   };
 
   const getWorkingDays = (openingHours: Doctor["opening_hours"]) => {
@@ -90,7 +99,7 @@ const useDateTimeHelper = () => {
 
     const minute = (decimal / min) * 100;
 
-    return (hour + minute).toFixed(2);
+    return parseFloat((hour + minute).toFixed(2));
   };
 
   const addDay = (date: string | Date, amount: number) => {
@@ -167,7 +176,10 @@ const useDateTimeHelper = () => {
     getCalendarDates,
     getTimeItems,
     getWorkingHours,
-    getWorkingDays
+    getWorkingDays,
+    formatDisplayDate,
+    formatDisplayHour,
+    formatDisplayHourFromFloat
   };
 };
 

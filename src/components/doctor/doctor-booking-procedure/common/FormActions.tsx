@@ -3,6 +3,7 @@ import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from "@heroicons/react/
 
 interface Props {
   isFormValid?: boolean;
+  isLoading?: boolean;
   isBackButtonVisible?: boolean;
   className?: string;
   handlePreviousStep?: () => void;
@@ -12,7 +13,8 @@ interface Props {
 }
 
 const FormActions: FC<Props> = ({
-  isFormValid,
+  isFormValid = true,
+  isLoading,
   isBackButtonVisible = true,
   handleNextStep,
   handlePreviousStep,
@@ -38,11 +40,12 @@ const FormActions: FC<Props> = ({
         {backButtonLabel}
       </button>
       <button
-        disabled={!isFormValid}
+        disabled={!isFormValid || isLoading}
         type="submit"
         className={`btn ${isFormValid ? "btn-primary btn-outline" : ""}`}
         onClick={nextButtonHandler}
       >
+        {isLoading && <span className="loading loading-spinner"></span>}
         {nextButtonLabel} <ChevronDoubleRightIcon className="w-6" />
       </button>
     </div>

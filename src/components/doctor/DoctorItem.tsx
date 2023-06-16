@@ -11,6 +11,7 @@ interface Props {
   address: Doctor["address"];
   onPrimaryButtonClick: () => void;
 }
+
 const DoctorItem: FC<Props> = ({ name, description, address, onPrimaryButtonClick }) => {
   const { getInitialsFromName, stringToColor } = useNecktieHelper();
 
@@ -22,7 +23,7 @@ const DoctorItem: FC<Props> = ({ name, description, address, onPrimaryButtonClic
       <figure className="px-2 pt-2">
         <div className="bg-neutral-content/30 rounded-xl flex-1 flex items-center p-3">
           <NecktieAvatar
-            width={10}
+            className="w-10"
             avatarStyle={{ backgroundColor: avatarColor }}
             initials={initials}
           />

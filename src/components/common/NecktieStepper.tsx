@@ -21,7 +21,7 @@ const NecktieStepper: FC<Props> = ({ steps, currentStep }) => {
             key={step.key}
             data-content={currentStepIndex >= index ? "✓" : ""}
             className={`step ${currentStepIndex >= index ? "step-primary" : ""} ${
-              currentStepIndex === index ? "font-bold" : "text-neutral-focus/20"
+              currentStepIndex === index ? "font-medium" : "text-neutral-focus/20"
             }`}
           >
             {step.label}

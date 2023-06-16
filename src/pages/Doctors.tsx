@@ -1,34 +1,39 @@
-import { createRef, lazy, useState } from "react";
+import { lazy, useCallback, useMemo, useState } from "react";
 import NecktieLoader from "components/common/NecktieLoader";
 import NecktieModal from "components/common/NecktieModal";
 import DoctorItem from "components/doctor/DoctorItem";
-import DoctorBookingProcedure from "components/doctor/doctor-booking-procedure";
 import { useGetDoctorsQuery } from "redux/services/necktieApi";
 import useDebounceValue from "hooks/useDebounceValue";
+import { Doctor } from "types/Doctor";
 
 const Toast = lazy(() => import("components/common/Toast"));
+const DoctorBookingProcedure = lazy(() => import("components/doctor/doctor-booking-procedure"));
 
 const Doctors = () => {
   const { data: doctors, isLoading } = useGetDoctorsQuery();
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor>();
   const [isModalVisible, setModalVisible] = useState(false);
-  const debouncedValue = useDebounceValue(searchTerm, 500);
+  const debouncedSearchTerm = useDebounceValue(searchTerm, 500);
 
-  const modalRef = createRef<HTMLDialogElement>();
-
-  // useEffect(() => {
-  //   setModalVisible(true);
-  //   modalRef.current?.showModal();
-  // }, []);
-  const handleShowModal = () => {
+  const handleShowModal = useCallback((doctor: Doctor) => {
+    setSelectedDoctor(doctor);
     setModalVisible(true);
-    // console.log(modalRef.current);
-    // modalRef.current?.showModal();
-  };
+  }, []);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setModalVisible(false);
-  };
+  }, []);
+
+  const filteredDoctors = useMemo(() => {
+    if (!doctors?.length) {
+      return [];
+    }
+
+    return doctors.filter((doctor) =>
+      doctor.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase().trim())
+    );
+  }, [doctors, debouncedSearchTerm]);
 
   return (
     <>
@@ -50,23 +55,27 @@ const Doctors = () => {
           </div>
         )}
 
-        {doctors?.length && (
+        {filteredDoctors.length && (
           <div className="flex-col md:flex-row hero-content flex-wrap gap-y-6">
-            {doctors.map((doctor) => (
+            {filteredDoctors.map((doctor) => (
               <DoctorItem
                 key={doctor.id}
                 name={doctor.name}
                 description={doctor.description}
                 address={doctor.address}
-                onPrimaryButtonClick={handleShowModal}
+                onPrimaryButtonClick={() => handleShowModal(doctor)}
               />
             ))}
           </div>
         )}
 
         {isModalVisible && (
-          <NecktieModal isVisible={isModalVisible} onModalClosed={handleCloseModal}>
-            <DoctorBookingProcedure />
+          <NecktieModal
+            isVisible={isModalVisible}
+            onModalClosed={handleCloseModal}
+            containerClassName="pb-20"
+          >
+            <DoctorBookingProcedure doctor={selectedDoctor} />
           </NecktieModal>
         )}
       </div>

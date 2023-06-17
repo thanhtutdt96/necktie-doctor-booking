@@ -1,4 +1,5 @@
-import { Dispatch, FC, SetStateAction, useMemo } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
+import { toast } from "react-toastify";
 import NecktieAvatar from "components/common/NecktieAvatar";
 import FieldWrapper from "components/doctor/common/FieldWrapper";
 import FormActions from "components/doctor/doctor-booking-procedure/common/FormActions";
@@ -16,7 +17,7 @@ interface Props {
 }
 
 const DoctorBookingStepReview: FC<Props> = ({ currentFormData, setCurrentStep, doctorName }) => {
-  const { initials, avatarColor } = useAvatarHelper();
+  const { initials, avatarColor } = useAvatarHelper(doctorName);
   const { formatDisplayDate, formatDisplayHourFromFloat } = useDateTimeHelper();
   const [createBooking, { isLoading }] = useCreateBookingMutation();
 
@@ -30,7 +31,7 @@ const DoctorBookingStepReview: FC<Props> = ({ currentFormData, setCurrentStep, d
 
         setCurrentStep(DoctorBookingStep.DONE);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => toast.error(error.data));
   };
 
   return (

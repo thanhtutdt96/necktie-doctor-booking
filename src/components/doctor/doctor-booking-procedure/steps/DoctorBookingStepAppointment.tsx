@@ -1,5 +1,6 @@
 import { Dispatch, FC, SetStateAction, useMemo, useState } from "react";
 import Calendar from "react-calendar";
+import { NavLink } from "react-router-dom";
 import { CalendarIcon } from "@heroicons/react/24/solid";
 import NecktieAvatar from "components/common/NecktieAvatar";
 import FieldWrapper from "components/doctor/common/FieldWrapper";
@@ -18,12 +19,14 @@ interface Props {
   setCurrentStep: Dispatch<SetStateAction<DoctorBookingStep>>;
   doctorName: Doctor["name"];
   doctorOpeningHours: Doctor["opening_hours"];
+  doctorId: Doctor["id"];
 }
 
 const DoctorBookingStepAppointment: FC<Props> = ({
   currentFormData,
   setCurrentFormData,
   setCurrentStep,
+  doctorId,
   doctorName,
   doctorOpeningHours
 }) => {
@@ -116,7 +119,7 @@ const DoctorBookingStepAppointment: FC<Props> = ({
   return (
     <>
       <FieldWrapper label="Selected doctor:">
-        <div className="flex items-center">
+        <NavLink to={`/doctors/${doctorId}`} className="flex items-center">
           <NecktieAvatar
             className="w-8"
             avatarStyle={{ backgroundColor: avatarColor }}
@@ -124,7 +127,7 @@ const DoctorBookingStepAppointment: FC<Props> = ({
             initialsSize="sm"
           />
           <span className="text-sm ml-2 font-medium">{doctorName}</span>
-        </div>
+        </NavLink>
       </FieldWrapper>
 
       <FieldWrapper label="Working time:">

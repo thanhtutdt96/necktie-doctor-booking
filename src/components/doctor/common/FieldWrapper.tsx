@@ -1,6 +1,4 @@
 import { FC, ReactNode } from "react";
-import { CalendarIcon } from "@heroicons/react/24/solid";
-import NecktieAvatar from "components/common/NecktieAvatar";
 
 interface Props {
   children: ReactNode;

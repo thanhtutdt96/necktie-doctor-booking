@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from "react";
+import { NavLink } from "react-router-dom";
 import NecktieLoader from "components/common/NecktieLoader";
 import NecktieModal from "components/common/NecktieModal";
 import NecktieSearchInput from "components/common/NecktieSearchInput";
@@ -61,17 +62,18 @@ const Doctors = () => {
         {filteredDoctors.length > 0 && (
           <div className="flex-col md:flex-row hero-content flex-wrap gap-y-6 w-full">
             {filteredDoctors.map((doctor) => (
-              <DoctorItem
-                key={doctor.id}
-                name={doctor.name}
-                description={doctor.description}
-                address={doctor.address}
-                onPrimaryButtonClick={() => handleShowModal(doctor)}
-              />
+              <NavLink key={doctor.id} to={`/doctors/${doctor.id}`} className="w-full md:w-[250px]">
+                <DoctorItem
+                  name={doctor.name}
+                  description={doctor.description}
+                  address={doctor.address}
+                  onPrimaryButtonClick={() => handleShowModal(doctor)}
+                  className="animate-slideup"
+                />
+              </NavLink>
             ))}
           </div>
         )}
-
         {isModalVisible && (
           <NecktieModal
             isVisible={isModalVisible}
@@ -82,7 +84,6 @@ const Doctors = () => {
           </NecktieModal>
         )}
       </div>
-      {/*<Toast />*/}
     </>
   );
 };

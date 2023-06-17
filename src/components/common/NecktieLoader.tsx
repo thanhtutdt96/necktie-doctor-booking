@@ -1,4 +1,5 @@
 import { FC, useMemo } from "react";
+import classNames from "classnames";
 import { LoaderType } from "types/Common";
 
 interface Props {
@@ -24,22 +25,18 @@ const NecktieLoader: FC<Props> = ({ type = LoaderType.DOT, className, size = "lg
     switch (type) {
       case LoaderType.PROGRESS:
         return (
-          <progress
-            className={`progress progress-primary w-56 ${className ? className : ""}`}
-          ></progress>
+          <progress className={classNames("progress progress-primary w-56", className)}></progress>
         );
       case LoaderType.SPINNER:
         return (
           <span
-            className={`loading text-primary loading-spinner ${dotSize} ${
-              className ? className : ""
-            }`}
+            className={classNames("loading text-primary loading-spinner", dotSize, className)}
           ></span>
         );
       case LoaderType.DOT:
         return (
           <span
-            className={`loading text-primary loading-dots ${dotSize} ${className ? className : ""}`}
+            className={classNames("loading text-primary loading-dots", dotSize, className)}
           ></span>
         );
     }

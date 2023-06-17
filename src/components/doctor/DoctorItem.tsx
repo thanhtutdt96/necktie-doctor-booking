@@ -1,6 +1,7 @@
-import { FC, memo } from "react";
+import { FC, memo, MouseEvent } from "react";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
+import classNames from "classnames";
 import NecktieAvatar from "components/common/NecktieAvatar";
 import useAvatarHelper from "hooks/useAvatarHelper";
 import { Doctor } from "types/Doctor";
@@ -10,13 +11,26 @@ interface Props {
   description: Doctor["description"];
   address: Doctor["address"];
   onPrimaryButtonClick: () => void;
+  className?: string;
 }
 
-const DoctorItem: FC<Props> = ({ name, description, address, onPrimaryButtonClick }) => {
+const DoctorItem: FC<Props> = ({ name, description, address, className, onPrimaryButtonClick }) => {
   const { initials, avatarColor } = useAvatarHelper(name);
 
+  const handleOnClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+
+    onPrimaryButtonClick();
+  };
+
   return (
-    <div className="sliderup card md:w-[250px] bg-base-100 w-full border shadow-lg transition duration-300 ease-in-out hover:cursor-pointer hover:shadow-xl hover:ring-neutral-content hover:ring-1 hover:-translate-y-0.5">
+    <div
+      className={classNames(
+        "card md:w-[250px] bg-base-100 w-full border shadow-lg transition duration-300 ease-in-out" +
+          "hover:cursor-pointer hover:shadow-xl hover:ring-neutral-content hover:ring-1 hover:-translate-y-0.5",
+        className
+      )}
+    >
       <figure className="px-2 pt-2">
         <div className="bg-neutral-content/30 rounded-xl flex-1 flex items-center p-3">
           <NecktieAvatar
@@ -46,7 +60,7 @@ const DoctorItem: FC<Props> = ({ name, description, address, onPrimaryButtonClic
         </p>
         <div className="divider my-0"></div>
         <div className="card-actions justify-center">
-          <button className="btn btn-secondary btn-sm" onClick={onPrimaryButtonClick}>
+          <button className="btn btn-secondary btn-sm" onClick={handleOnClick}>
             <PaperAirplaneIcon className="w-4 h-auto" />
             Book
           </button>

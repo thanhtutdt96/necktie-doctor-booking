@@ -3,7 +3,7 @@ import { necktieApi } from "redux/services/necktieApi";
 
 export const store = configureStore({
   reducer: {
-    [necktieApi.reducerPath]: necktieApi.reducer,
+    [necktieApi.reducerPath]: necktieApi.reducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(necktieApi.middleware)
 });

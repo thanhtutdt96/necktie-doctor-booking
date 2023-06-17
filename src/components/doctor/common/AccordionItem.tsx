@@ -1,4 +1,5 @@
-import { ChangeEvent, FC, memo, ReactNode } from "react";
+import { FC, memo, ReactNode } from "react";
+import classNames from "classnames";
 
 interface Props {
   id: string | number;
@@ -6,11 +7,12 @@ interface Props {
   content?: ReactNode;
   isOpened?: boolean;
   onAccordionOpen?: (id: string | number) => void;
+  className?: string;
 }
 
-const AccordionItem: FC<Props> = ({ id, title, content, isOpened, onAccordionOpen }) => {
+const AccordionItem: FC<Props> = ({ id, title, content, isOpened, onAccordionOpen, className }) => {
   return (
-    <div className="collapse collapse-arrow bg-primary-content/40">
+    <div className={classNames("collapse collapse-arrow bg-primary-content/40", className)}>
       <input
         type="radio"
         name="accordion-item"

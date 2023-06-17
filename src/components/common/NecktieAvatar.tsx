@@ -1,4 +1,5 @@
 import { CSSProperties, FC } from "react";
+import classNames from "classnames";
 
 interface Props {
   className?: string;
@@ -16,7 +17,7 @@ const NecktieAvatar: FC<Props> = ({
 }) => {
   return (
     <div className="avatar">
-      <div className={`rounded-full ${className ? className : ""}`} style={avatarStyle}>
+      <div className={classNames("rounded-full", className)} style={avatarStyle}>
         {photoUrl && (
           <img
             src="https://images.pexels.com/photos/259950/pexels-photo-259950.jpeg?auto=compress&amp;cs=tinysrgb&amp;h=225"

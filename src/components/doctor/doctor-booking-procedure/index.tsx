@@ -56,6 +56,7 @@ const DoctorBookingProcedure = () => {
             currentFormData={currentFormData}
             setCurrentFormData={setCurrentFormData}
             setCurrentStep={setCurrentStep}
+            doctorId={doctor?.id ?? ""}
             doctorName={doctor?.name ?? ""}
             doctorOpeningHours={doctor?.opening_hours ?? []}
           />

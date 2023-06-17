@@ -1,5 +1,6 @@
-import { FC, memo } from "react";
+import { FC, memo, ReactNode } from "react";
 import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from "@heroicons/react/20/solid";
+import classNames from "classnames";
 
 interface Props {
   isFormValid?: boolean;
@@ -10,6 +11,7 @@ interface Props {
   handleNextStep?: () => void;
   backButtonLabel?: string;
   nextButtonLabel?: string;
+  nextButtonIcon?: ReactNode;
 }
 
 const FormActions: FC<Props> = ({
@@ -20,6 +22,7 @@ const FormActions: FC<Props> = ({
   handlePreviousStep,
   backButtonLabel = "Back",
   nextButtonLabel = "Next",
+  nextButtonIcon,
   className
 }) => {
   const backButtonHandler = () => {
@@ -31,9 +34,9 @@ const FormActions: FC<Props> = ({
   };
 
   return (
-    <div className={`flex justify-between ${className ? className : ""}`}>
+    <div className={classNames("flex justify-between", className)}>
       <button
-        className={`btn btn-primary btn-outline${!isBackButtonVisible ? " invisible" : ""}`}
+        className={classNames("btn btn-primary btn-outline", { invisible: !isBackButtonVisible })}
         onClick={backButtonHandler}
       >
         <ChevronDoubleLeftIcon className="w-6" />
@@ -42,11 +45,12 @@ const FormActions: FC<Props> = ({
       <button
         disabled={!isFormValid || isLoading}
         type="submit"
-        className={`btn ${isFormValid ? "btn-primary btn-outline" : ""}`}
+        className={classNames("btn", { "btn-primary btn-outline": isFormValid })}
         onClick={nextButtonHandler}
       >
         {isLoading && <span className="loading loading-spinner"></span>}
-        {nextButtonLabel} <ChevronDoubleRightIcon className="w-6" />
+        {`${nextButtonLabel} `}
+        {nextButtonIcon ? nextButtonIcon : <ChevronDoubleRightIcon className="w-6" />}
       </button>
     </div>
   );

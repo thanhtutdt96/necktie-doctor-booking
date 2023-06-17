@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 import NecktieAvatar from "components/common/NecktieAvatar";
 import NecktieLoader from "components/common/NecktieLoader";
 import NecktieSearchInput from "components/common/NecktieSearchInput";
@@ -49,7 +51,7 @@ const MyBookings = () => {
 
         setSelectedDoctor(doctorData);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => toast.error(error.data));
   };
 
   return (
@@ -76,6 +78,7 @@ const MyBookings = () => {
                 key={booking.id}
                 id={booking.id}
                 isOpened={activeAccordionId === booking.id}
+                className="animate-slideup"
                 title={
                   <div className="flex flex-1 justify-between">
                     <span>
@@ -101,7 +104,10 @@ const MyBookings = () => {
                       </FieldWrapper>
 
                       <FieldWrapper label="Selected doctor:">
-                        <div className="flex items-center">
+                        <NavLink
+                          to={`/doctors/${selectedDoctor?.id}`}
+                          className="flex items-center"
+                        >
                           <NecktieAvatar
                             className="w-8"
                             avatarStyle={{ backgroundColor: avatarColor }}
@@ -109,7 +115,7 @@ const MyBookings = () => {
                             initialsSize="sm"
                           />
                           <span className="text-sm ml-2 font-medium">{selectedDoctor?.name}</span>
-                        </div>
+                        </NavLink>
                       </FieldWrapper>
                     </>
                   )

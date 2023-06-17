@@ -1,8 +1,8 @@
-import { FC, memo, useMemo } from "react";
+import { FC, memo } from "react";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
 import NecktieAvatar from "components/common/NecktieAvatar";
-import useNecktieHelper from "hooks/useNecktieHelper";
+import useAvatarHelper from "hooks/useAvatarHelper";
 import { Doctor } from "types/Doctor";
 
 interface Props {
@@ -13,10 +13,7 @@ interface Props {
 }
 
 const DoctorItem: FC<Props> = ({ name, description, address, onPrimaryButtonClick }) => {
-  const { getInitialsFromName, stringToColor } = useNecktieHelper();
-
-  const initials = useMemo(() => getInitialsFromName(name), [getInitialsFromName, name]);
-  const avatarColor = useMemo(() => stringToColor(name), [name, stringToColor]);
+  const { initials, avatarColor } = useAvatarHelper(name);
 
   return (
     <div className="sliderup card md:w-[250px] bg-base-100 w-full border shadow-lg transition duration-300 ease-in-out hover:cursor-pointer hover:shadow-xl hover:ring-neutral-content hover:ring-1 hover:-translate-y-0.5">

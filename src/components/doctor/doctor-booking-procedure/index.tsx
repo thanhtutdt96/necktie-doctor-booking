@@ -1,12 +1,12 @@
-import { FC, useState } from "react";
+import { useState } from "react";
 import NecktieStepper from "components/common/NecktieStepper";
 import DoctorBookingStepAppointment from "components/doctor/doctor-booking-procedure/steps/DoctorBookingStepAppointment";
 import DoctorBookingStepDone from "components/doctor/doctor-booking-procedure/steps/DoctorBookingStepDone";
 import DoctorBookingStepFill from "components/doctor/doctor-booking-procedure/steps/DoctorBookingStepFill";
 import DoctorBookingStepReview from "components/doctor/doctor-booking-procedure/steps/DoctorBookingStepReview";
+import { useMainLayoutContext } from "contexts/MainLayoutContext";
 import { BookingFormData } from "types/Booking";
 import { DoctorBookingStep } from "types/Common";
-import { Doctor } from "types/Doctor";
 
 const bookingSteps = [
   {
@@ -27,11 +27,8 @@ const bookingSteps = [
   }
 ];
 
-interface Props {
-  doctor?: Doctor;
-}
-
-const DoctorBookingProcedure: FC<Props> = ({ doctor }) => {
+const DoctorBookingProcedure = () => {
+  const { selectedDoctor: doctor } = useMainLayoutContext();
   const [currentStep, setCurrentStep] = useState(DoctorBookingStep.FILL);
   const [currentFormData, setCurrentFormData] = useState<BookingFormData>({
     name: "",

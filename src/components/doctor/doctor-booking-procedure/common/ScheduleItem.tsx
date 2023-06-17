@@ -11,12 +11,12 @@ interface Props {
 const ScheduleItem: FC<Props> = ({ children, className, onClick, isDisabled, isSelected }) => {
   return (
     <button
-      className={`text-sm text-neutral flex flex-col justify-center items-center rounded-3xl bg-base-100 border
-      shadow-sm hover:cursor-pointer hover:ring-neutral-content hover:ring-1 ${
-        isSelected ? "ring-secondary hover:ring-secondary ring-1 text-secondary" : ""
-      } ${isDisabled ? "hover:ring-0 border-neutral-content/40 text-neutral/40" : ""} ${
-        className ? className : ""
-      }`}
+      className={`text-sm text-neutral flex flex-col justify-center items-center rounded-3xl bg-base-100
+      shadow-sm hover:cursor-pointer border ${
+        !isDisabled ? "border-neutral-content hover:ring-neutral-content hover:ring-1" : ""
+      } ${isSelected ? "ring-secondary hover:ring-secondary ring-1 text-secondary" : ""} ${
+        isDisabled ? "hover:ring-0 border-neutral-content/40 text-neutral/50" : ""
+      } ${className ? className : ""}`}
       disabled={isDisabled}
       onClick={() => onClick?.()}
     >

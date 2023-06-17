@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BookingFormData } from "types/Booking";
+import { Booking, BookingFormData } from "types/Booking";
 import { NecktieApiTagType } from "types/Common";
 import { Doctor } from "types/Doctor";
 
@@ -27,11 +27,11 @@ export const necktieApi = createApi({
       query: (doctorId: string) => `/doctor/${doctorId}`,
       providesTags: [NecktieApiTagType.DOCTOR]
     }),
-    getBookings: builder.query<Doctor[], void>({
+    getBookings: builder.query<Booking[], void>({
       query: () => "/booking",
       providesTags: [NecktieApiTagType.BOOKING]
     }),
-    createBooking: builder.mutation<Boo, BookingFormData>({
+    createBooking: builder.mutation<Booking, BookingFormData>({
       query(item) {
         return {
           url: "/booking",
@@ -47,6 +47,7 @@ export const necktieApi = createApi({
 export const {
   useGetDoctorsQuery,
   useGetDoctorByIdQuery,
+  useLazyGetDoctorByIdQuery,
   useGetBookingsQuery,
   useCreateBookingMutation
 } = necktieApi;

@@ -12,10 +12,16 @@ export enum DoctorBookingStep {
   FILL = "fill",
   APPOINTMENT = "appointment",
   REVIEW = "review",
-  DONE = "done",
+  DONE = "done"
 }
 
 export interface StepperStep {
   key: string;
   label: string;
+}
+
+export enum LoaderType {
+  PROGRESS = "progress",
+  SPINNER = "spinner",
+  DOT = "dot"
 }

@@ -1,11 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { necktieApi } from "redux/services/necktieApi";
-import { toastSlice } from "redux/slices/toastSlice";
 
 export const store = configureStore({
   reducer: {
     [necktieApi.reducerPath]: necktieApi.reducer,
-    toast: toastSlice.reducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(necktieApi.middleware)
 });

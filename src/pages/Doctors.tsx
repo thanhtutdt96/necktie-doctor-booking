@@ -1,29 +1,29 @@
-import { lazy, useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import NecktieLoader from "components/common/NecktieLoader";
 import NecktieModal from "components/common/NecktieModal";
+import NecktieSearchInput from "components/common/NecktieSearchInput";
 import DoctorItem from "components/doctor/DoctorItem";
 import DoctorBookingProcedure from "components/doctor/doctor-booking-procedure";
+import { useMainLayoutContext } from "contexts/MainLayoutContext";
 import { useGetDoctorsQuery } from "redux/services/necktieApi";
-import useDebounceValue from "hooks/useDebounceValue";
 import { Doctor } from "types/Doctor";
-
-const Toast = lazy(() => import("components/common/Toast"));
 
 const Doctors = () => {
   const { data: doctors, isLoading } = useGetDoctorsQuery();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor>();
-  const [isModalVisible, setModalVisible] = useState(false);
-  const debouncedSearchTerm = useDebounceValue(searchTerm, 500);
+  const { searchTerm, setSelectedDoctor, debouncedSearchTerm, isModalVisible, setModalVisible } =
+    useMainLayoutContext();
 
-  const handleShowModal = useCallback((doctor: Doctor) => {
-    setSelectedDoctor(doctor);
-    setModalVisible(true);
-  }, []);
+  const handleShowModal = useCallback(
+    (doctor: Doctor) => {
+      setSelectedDoctor?.(doctor);
+      setModalVisible?.(true);
+    },
+    [setModalVisible, setSelectedDoctor]
+  );
 
   const handleCloseModal = useCallback(() => {
-    setModalVisible(false);
-  }, []);
+    setModalVisible?.(false);
+  }, [setModalVisible]);
 
   const filteredDoctors = useMemo(() => {
     if (!doctors?.length) {
@@ -31,21 +31,20 @@ const Doctors = () => {
     }
 
     return doctors.filter((doctor) =>
-      doctor.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase().trim())
+      [
+        doctor.name.toLowerCase(),
+        doctor.description?.toLowerCase() ?? "",
+        doctor.address.line_1.toLowerCase(),
+        doctor.address.line_2?.toLowerCase() ?? "",
+        doctor.address.district.toLowerCase()
+      ].some((element) => element.includes(debouncedSearchTerm.toLowerCase().trim()))
     );
   }, [doctors, debouncedSearchTerm]);
 
   return (
     <>
       <div className="flex justify-center mt-7">
-        <input
-          value={searchTerm}
-          type="text"
-          placeholder="Search..."
-          className="input input-bordered w-60 input-sm"
-          onChange={(event) => setSearchTerm(event.target.value)}
-          disabled={!doctors?.length}
-        />
+        <NecktieSearchInput isDisabled={!doctors?.length} placeholder="Search doctors..." />
       </div>
 
       <div className="hero mt-5 items-start w-full">
@@ -59,8 +58,8 @@ const Doctors = () => {
           <p className="text-sm">No doctors found</p>
         )}
 
-        {filteredDoctors?.length && (
-          <div className="flex-col md:flex-row hero-content flex-wrap gap-y-6">
+        {filteredDoctors.length > 0 && (
+          <div className="flex-col md:flex-row hero-content flex-wrap gap-y-6 w-full">
             {filteredDoctors.map((doctor) => (
               <DoctorItem
                 key={doctor.id}
@@ -79,7 +78,7 @@ const Doctors = () => {
             onModalClosed={handleCloseModal}
             containerClassName="pb-20"
           >
-            <DoctorBookingProcedure doctor={selectedDoctor} />
+            <DoctorBookingProcedure />
           </NecktieModal>
         )}
       </div>

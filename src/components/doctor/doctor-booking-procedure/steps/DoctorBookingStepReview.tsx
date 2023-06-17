@@ -3,8 +3,8 @@ import NecktieAvatar from "components/common/NecktieAvatar";
 import FieldWrapper from "components/doctor/common/FieldWrapper";
 import FormActions from "components/doctor/doctor-booking-procedure/common/FormActions";
 import { useCreateBookingMutation } from "redux/services/necktieApi";
+import useAvatarHelper from "hooks/useAvatarHelper";
 import useDateTimeHelper from "hooks/useDateTimeHelper";
-import useNecktieHelper from "hooks/useNecktieHelper";
 import { BookingFormData } from "types/Booking";
 import { DoctorBookingStep } from "types/Common";
 import { Doctor } from "types/Doctor";
@@ -16,7 +16,7 @@ interface Props {
 }
 
 const DoctorBookingStepReview: FC<Props> = ({ currentFormData, setCurrentStep, doctorName }) => {
-  const { getInitialsFromName, stringToColor } = useNecktieHelper();
+  const { initials, avatarColor } = useAvatarHelper();
   const { formatDisplayDate, formatDisplayHourFromFloat } = useDateTimeHelper();
   const [createBooking, { isLoading }] = useCreateBookingMutation();
 
@@ -32,12 +32,6 @@ const DoctorBookingStepReview: FC<Props> = ({ currentFormData, setCurrentStep, d
       })
       .catch((error) => console.log(error));
   };
-
-  const initials = useMemo(
-    () => getInitialsFromName(doctorName),
-    [getInitialsFromName, doctorName]
-  );
-  const avatarColor = useMemo(() => stringToColor(doctorName), [doctorName, stringToColor]);
 
   return (
     <div className="grid grid-cols-2">

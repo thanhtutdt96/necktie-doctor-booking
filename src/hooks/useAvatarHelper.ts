@@ -1,4 +1,9 @@
-const useNecktieHelper = () => {
+import { useEffect, useState } from "react";
+
+const useAvatarHelper = (name?: string) => {
+  const [initials, setInitials] = useState("");
+  const [avatarColor, setAvatarColor] = useState("");
+
   const getInitialsFromName = (name: string) => {
     const names = name?.split(" ");
     let initials = names[0].substring(0, 1).toUpperCase();
@@ -8,6 +13,7 @@ const useNecktieHelper = () => {
     }
     return initials;
   };
+
   const stringToColor = (string: string) => {
     let hash = 0;
     for (let i = 0; i < string.length; i++) {
@@ -23,10 +29,19 @@ const useNecktieHelper = () => {
     return color;
   };
 
+  useEffect(() => {
+    if (!name?.length) {
+      return;
+    }
+
+    setInitials(getInitialsFromName(name));
+    setAvatarColor(stringToColor(name));
+  }, [name]);
+
   return {
-    stringToColor,
-    getInitialsFromName
+    initials,
+    avatarColor
   };
 };
 
-export default useNecktieHelper;
+export default useAvatarHelper;

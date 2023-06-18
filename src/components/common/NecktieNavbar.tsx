@@ -33,7 +33,7 @@ const NecktieNavbar = () => {
               />
             </svg>
           </button>
-          <ul className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+          <ul className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 z-50">
             {navbarItems.map((item, index) => (
               <li key={index}>
                 <NavLink

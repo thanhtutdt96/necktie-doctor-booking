@@ -1,9 +1,16 @@
-import { CheckBadgeIcon, CheckIcon } from "@heroicons/react/24/solid";
+import { useNavigate } from "react-router";
+import { CheckBadgeIcon } from "@heroicons/react/24/solid";
 import FormActions from "components/doctor/doctor-booking-procedure/common/FormActions";
 import { useMainLayoutContext } from "contexts/MainLayoutContext";
 
 const DoctorBookingStepDone = () => {
+  const navigate = useNavigate();
   const { setModalVisible } = useMainLayoutContext();
+
+  const handleNextStep = () => {
+    setModalVisible?.(false);
+    navigate("/bookings");
+  };
 
   return (
     <>
@@ -13,9 +20,9 @@ const DoctorBookingStepDone = () => {
       </div>
 
       <FormActions
-        nextButtonLabel="Finish"
-        nextButtonIcon={<CheckIcon className="w-6" />}
-        handleNextStep={() => setModalVisible?.(false)}
+        nextButtonLabel="View Bookings"
+        nextButtonIcon={<span className="invisible" />}
+        handleNextStep={() => handleNextStep()}
         isBackButtonVisible={false}
         className="fixed left-6 right-6 bottom-4"
       />

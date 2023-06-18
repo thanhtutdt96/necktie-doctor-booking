@@ -10,7 +10,7 @@ const childrenRoutes = [
     element: <Doctors />
   },
   {
-    path: "/doctors/:id",
+    path: "/doctors/:doctorId",
     element: <DoctorDetails />
   },
   {

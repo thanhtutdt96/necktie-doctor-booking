@@ -1,12 +1,14 @@
 import { useMemo, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
+import classNames from "classnames";
 import NecktieAvatar from "components/common/NecktieAvatar";
 import NecktieLoader from "components/common/NecktieLoader";
 import NecktieSearchInput from "components/common/NecktieSearchInput";
 import AccordionItem from "components/doctor/common/AccordionItem";
 import FieldWrapper from "components/doctor/common/FieldWrapper";
 import { useMainLayoutContext } from "contexts/MainLayoutContext";
+import { orderBy } from "lodash-es";
 import { useGetBookingsQuery, useLazyGetDoctorByIdQuery } from "redux/services/necktieApi";
 import useAvatarHelper from "hooks/useAvatarHelper";
 import useDateTimeHelper from "hooks/useDateTimeHelper";
@@ -28,7 +30,7 @@ const MyBookings = () => {
       return [];
     }
 
-    return bookings.filter((booking) =>
+    const matchedBookings = bookings.filter((booking) =>
       [
         booking.name.toLowerCase(),
         booking.date.toLowerCase(),
@@ -36,6 +38,8 @@ const MyBookings = () => {
         booking.status?.toLowerCase() ?? ""
       ].some((element) => element.includes(debouncedSearchTerm.toLowerCase().trim()))
     );
+
+    return orderBy(matchedBookings, "date", "desc");
   }, [bookings, debouncedSearchTerm]);
 
   const handleAccordionOpen = (accordionId: string, doctorId: string) => {
@@ -55,12 +59,12 @@ const MyBookings = () => {
   };
 
   return (
-    <>
-      <div className="flex justify-center mt-7">
-        <NecktieSearchInput placeholder="Search bookings..." />
-      </div>
+    <div className="hero mt-3">
+      <div className="hero-content w-full flex-col">
+        <div className="flex justify-center mb-3">
+          <NecktieSearchInput placeholder="Search bookings..." />
+        </div>
 
-      <div className="hero mt-5 items-start w-full">
         {isLoading && (
           <div className="flex justify-center items-center">
             <NecktieLoader />
@@ -72,7 +76,7 @@ const MyBookings = () => {
         )}
 
         {filteredBookings.length > 0 && (
-          <div className="flex-col hero-content flex-wrap gap-y-3 w-full md:max-w-[36rem]">
+          <div className="flex-col flex justify-center flex-wrap gap-y-3 w-full md:max-w-[36rem]">
             {filteredBookings.map((booking) => (
               <AccordionItem
                 key={booking.id}
@@ -80,15 +84,16 @@ const MyBookings = () => {
                 isOpened={activeAccordionId === booking.id}
                 className="animate-slideup"
                 title={
-                  <div className="flex flex-1 justify-between">
+                  <div className="flex flex-1 justify-between items-center">
                     <span>
                       Date: {formatDisplayDate(booking.date)} -{" "}
                       {formatDisplayHourFromFloat(parseFloat(booking.start))}
                     </span>
                     <div
-                      className={`badge ${
-                        booking.status === BookingStatus.CONFIRMED ? "badge-success" : "badge-error"
-                      } badge-outline h-6`}
+                      className={classNames("badge badge-outline h-6", {
+                        "badge-success": booking.status === BookingStatus.CONFIRMED,
+                        "badge-error": booking.status === BookingStatus.CANCEL
+                      })}
                     >
                       {booking.status}
                     </div>
@@ -98,12 +103,8 @@ const MyBookings = () => {
                   isFetchingDoctor ? (
                     <NecktieLoader size="sm" />
                   ) : (
-                    <>
-                      <FieldWrapper label="Patient name:">
-                        <p className="text-sm">{booking.name}</p>
-                      </FieldWrapper>
-
-                      <FieldWrapper label="Selected doctor:">
+                    <div className="grid grid-cols-2">
+                      <FieldWrapper label="Selected doctor:" className="mb-0">
                         <NavLink
                           to={`/doctors/${selectedDoctor?.id}`}
                           className="flex items-center"
@@ -117,7 +118,11 @@ const MyBookings = () => {
                           <span className="text-sm ml-2 font-medium">{selectedDoctor?.name}</span>
                         </NavLink>
                       </FieldWrapper>
-                    </>
+
+                      <FieldWrapper label="Patient name:" className="mb-0">
+                        <p className="text-sm">{booking.name}</p>
+                      </FieldWrapper>
+                    </div>
                   )
                 }
                 onAccordionOpen={(accordionId) =>
@@ -128,7 +133,7 @@ const MyBookings = () => {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

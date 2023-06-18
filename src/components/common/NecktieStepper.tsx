@@ -1,4 +1,5 @@
 import { FC, memo, useMemo } from "react";
+import classNames from "classnames";
 import { StepperStep } from "types/Common";
 
 interface Props {
@@ -20,9 +21,11 @@ const NecktieStepper: FC<Props> = ({ steps, currentStep }) => {
           <li
             key={step.key}
             data-content={currentStepIndex >= index ? "✓" : ""}
-            className={`step ${currentStepIndex >= index ? "step-primary" : ""} ${
+            className={classNames(
+              "step",
+              { "step-primary": currentStepIndex >= index },
               currentStepIndex === index ? "font-medium" : "text-neutral-focus/20"
-            }`}
+            )}
           >
             {step.label}
           </li>

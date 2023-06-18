@@ -14,9 +14,15 @@ interface Props {
   currentFormData: BookingFormData;
   setCurrentStep: Dispatch<SetStateAction<DoctorBookingStep>>;
   doctorName: Doctor["name"];
+  onBackStep?: () => void;
 }
 
-const DoctorBookingStepReview: FC<Props> = ({ currentFormData, setCurrentStep, doctorName }) => {
+const DoctorBookingStepReview: FC<Props> = ({
+  currentFormData,
+  setCurrentStep,
+  doctorName,
+  onBackStep
+}) => {
   const { initials, avatarColor } = useAvatarHelper(doctorName);
   const { formatDisplayDate, formatDisplayHourFromFloat } = useDateTimeHelper();
   const [createBooking, { isLoading }] = useCreateBookingMutation();
@@ -62,7 +68,7 @@ const DoctorBookingStepReview: FC<Props> = ({ currentFormData, setCurrentStep, d
       <FormActions
         isFormValid={true}
         isLoading={isLoading}
-        handlePreviousStep={() => setCurrentStep(DoctorBookingStep.APPOINTMENT)}
+        handlePreviousStep={() => onBackStep?.()}
         handleNextStep={handleSubmitData}
         className="fixed left-6 right-6 bottom-4"
       />

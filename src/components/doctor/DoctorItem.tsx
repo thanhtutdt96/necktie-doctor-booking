@@ -1,21 +1,31 @@
 import { FC, memo, MouseEvent } from "react";
-import { CheckCircleIcon } from "@heroicons/react/24/outline";
-import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
+import { BellAlertIcon } from "@heroicons/react/24/solid";
 import classNames from "classnames";
 import NecktieAvatar from "components/common/NecktieAvatar";
+import DoctorAvailableStatus from "components/doctor/common/DoctorAvailableStatus";
 import useAvatarHelper from "hooks/useAvatarHelper";
+import useDoctorSchedule from "hooks/useDoctorSchedule";
 import { Doctor } from "types/Doctor";
 
 interface Props {
   name: Doctor["name"];
   description: Doctor["description"];
   address: Doctor["address"];
+  openingHours: Doctor["opening_hours"];
   onPrimaryButtonClick: () => void;
   className?: string;
 }
 
-const DoctorItem: FC<Props> = ({ name, description, address, className, onPrimaryButtonClick }) => {
+const DoctorItem: FC<Props> = ({
+  name,
+  description,
+  address,
+  openingHours,
+  className,
+  onPrimaryButtonClick
+}) => {
   const { initials, avatarColor } = useAvatarHelper(name);
+  const { isAvailableToday } = useDoctorSchedule(openingHours);
 
   const handleOnClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -39,7 +49,7 @@ const DoctorItem: FC<Props> = ({ name, description, address, className, onPrimar
             initials={initials}
           />
           <div className="flex flex-col ml-2">
-            <h4 className="card-title text-sm truncate flex-1 mb-1">{name}</h4>
+            <h4 className="card-title text-sm truncate flex-1 mb-1">Dr. {name}</h4>
             <p className="text-xs text-gray-500 line-clamp-2">{address.district}</p>
           </div>
         </div>
@@ -54,14 +64,11 @@ const DoctorItem: FC<Props> = ({ name, description, address, className, onPrimar
             </div>
           </div>
         </div>
-        <p className="flex items-center text-xs text-success">
-          <CheckCircleIcon className="w-5 mr-1" />
-          Available
-        </p>
+        <DoctorAvailableStatus isAvailableToday={isAvailableToday} />
         <div className="divider my-0"></div>
         <div className="card-actions justify-center">
           <button className="btn btn-secondary btn-sm" onClick={handleOnClick}>
-            <PaperAirplaneIcon className="w-4 h-auto" />
+            <BellAlertIcon className="w-4 h-auto" />
             Book
           </button>
         </div>

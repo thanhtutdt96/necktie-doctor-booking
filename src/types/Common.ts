@@ -25,3 +25,9 @@ export enum LoaderType {
   SPINNER = "spinner",
   DOT = "dot"
 }
+
+export interface AuthUser {
+  id: string;
+  name: string;
+  token: string;
+}

@@ -1,17 +1,19 @@
-import { Dispatch, FC, SetStateAction, useMemo, useState } from "react";
+import { Dispatch, FC, SetStateAction, useMemo } from "react";
 import Calendar from "react-calendar";
 import { NavLink } from "react-router-dom";
 import { CalendarIcon } from "@heroicons/react/24/solid";
+import classNames from "classnames";
 import NecktieAvatar from "components/common/NecktieAvatar";
 import FieldWrapper from "components/doctor/common/FieldWrapper";
 import FormActions from "components/doctor/doctor-booking-procedure/common/FormActions";
 import ScheduleItem from "components/doctor/doctor-booking-procedure/common/ScheduleItem";
 import useAvatarHelper from "hooks/useAvatarHelper";
 import useDateTimeHelper from "hooks/useDateTimeHelper";
+import useDoctorSchedule from "hooks/useDoctorSchedule";
 import useModal from "hooks/useModal";
 import { BookingFormData } from "types/Booking";
 import { DoctorBookingStep } from "types/Common";
-import { Doctor, DoctorScheduleDateItem, DoctorScheduleMap } from "types/Doctor";
+import { Doctor, DoctorScheduleDateItem } from "types/Doctor";
 
 interface Props {
   setCurrentFormData: Dispatch<SetStateAction<BookingFormData>>;
@@ -32,55 +34,19 @@ const DoctorBookingStepAppointment: FC<Props> = ({
 }) => {
   const { initials, avatarColor } = useAvatarHelper(doctorName);
   const {
-    getCalendarDates,
-    getTimeItems,
-    getDefaultSelectedDate,
-    getWorkingHours,
-    getWorkingDays
-  } = useDateTimeHelper();
+    selectedDate,
+    setSelectedDate,
+    selectedHour,
+    setSelectedHour,
+    scheduleDates,
+    scheduleTimeMap,
+    startWorkingHour,
+    endWorkingHour,
+    startWorkingDay,
+    endWorkingDay
+  } = useDoctorSchedule(doctorOpeningHours, currentFormData.date, currentFormData.start);
+  const { getDefaultSelectedDate } = useDateTimeHelper();
   const { isShowing: isCalendarVisible, toggleModal } = useModal();
-
-  const [selectedDate, setSelectedDate] = useState<DoctorScheduleDateItem>(
-    getDefaultSelectedDate(currentFormData.date ? currentFormData.date : new Date())
-  );
-  const [selectedHour, setSelectedHour] = useState(
-    currentFormData.start ? currentFormData.start : undefined
-  );
-
-  const scheduleDates = useMemo(() => {
-    return getCalendarDates(selectedDate.date, 1);
-  }, [getCalendarDates, selectedDate.date]);
-
-  const [startWorkingHour, endWorkingHour] = useMemo(
-    () => getWorkingHours(doctorOpeningHours),
-    [doctorOpeningHours, getWorkingHours]
-  );
-
-  const [startWorkingDay, endWorkingDay] = useMemo(
-    () => getWorkingDays(doctorOpeningHours),
-    [doctorOpeningHours, getWorkingDays]
-  );
-
-  const scheduleTimeMap = useMemo(() => {
-    return doctorOpeningHours.reduce((accumulative: DoctorScheduleMap, currentValue) => {
-      const timeItems = getTimeItems(
-        parseFloat(currentValue.start),
-        parseFloat(currentValue.end),
-        60,
-        selectedDate.date
-      );
-
-      const futureTimeItems = timeItems.filter((item) => !item.isPast);
-
-      accumulative[currentValue.day] = currentValue.isClosed
-        ? []
-        : futureTimeItems.length
-        ? timeItems
-        : [];
-
-      return accumulative;
-    }, {});
-  }, [doctorOpeningHours, getTimeItems, selectedDate.date]);
 
   const isFormValid = useMemo(
     () => !!selectedDate?.date && !!selectedHour,
@@ -159,7 +125,7 @@ const DoctorBookingStepAppointment: FC<Props> = ({
               <div className="grid grid-cols-7 gap-4 md:gap-7 mb-3">
                 {scheduleDates.map((date) => (
                   <ScheduleItem
-                    className="pt-2 pb-1"
+                    className="pt-2 pb-1 px-1"
                     key={date.date}
                     isDisabled={date.isPast}
                     isSelected={selectedDate?.date === date.date}
@@ -167,11 +133,9 @@ const DoctorBookingStepAppointment: FC<Props> = ({
                   >
                     <div className="mb-2">{date.shortDay}</div>
                     <div
-                      className={`flex justify-center items-center w-8 h-8 ${
-                        selectedDate?.date === date.date
-                          ? "bg-secondary rounded-full text-white"
-                          : ""
-                      }`}
+                      className={classNames("flex justify-center items-center w-8 h-8", {
+                        "bg-secondary rounded-full text-white": selectedDate?.date === date.date
+                      })}
                     >
                       {date.day}
                     </div>

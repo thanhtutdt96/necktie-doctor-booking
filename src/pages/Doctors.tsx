@@ -22,10 +22,6 @@ const Doctors = () => {
     [setModalVisible, setSelectedDoctor]
   );
 
-  const handleCloseModal = useCallback(() => {
-    setModalVisible?.(false);
-  }, [setModalVisible]);
-
   const filteredDoctors = useMemo(() => {
     if (!doctors?.length) {
       return [];
@@ -43,12 +39,12 @@ const Doctors = () => {
   }, [doctors, debouncedSearchTerm]);
 
   return (
-    <>
-      <div className="flex justify-center mt-7">
-        <NecktieSearchInput isDisabled={!doctors?.length} placeholder="Search doctors..." />
-      </div>
+    <div className="hero mt-3">
+      <div className="hero-content w-full flex-col">
+        <div className="flex justify-center mb-3">
+          <NecktieSearchInput isDisabled={!doctors?.length} placeholder="Search doctors..." />
+        </div>
 
-      <div className="hero mt-5 items-start w-full">
         {isLoading && (
           <div className="flex justify-center items-center">
             <NecktieLoader />
@@ -60,13 +56,14 @@ const Doctors = () => {
         )}
 
         {filteredDoctors.length > 0 && (
-          <div className="flex-col md:flex-row hero-content flex-wrap gap-y-6 w-full">
+          <div className="flex-col md:flex-row flex justify-center flex-wrap gap-6 w-full">
             {filteredDoctors.map((doctor) => (
               <NavLink key={doctor.id} to={`/doctors/${doctor.id}`} className="w-full md:w-[250px]">
                 <DoctorItem
                   name={doctor.name}
                   description={doctor.description}
                   address={doctor.address}
+                  openingHours={doctor.opening_hours}
                   onPrimaryButtonClick={() => handleShowModal(doctor)}
                   className="animate-slideup"
                 />
@@ -74,17 +71,18 @@ const Doctors = () => {
             ))}
           </div>
         )}
+
         {isModalVisible && (
           <NecktieModal
             isVisible={isModalVisible}
-            onModalClosed={handleCloseModal}
+            onModalClosed={() => setModalVisible?.(false)}
             containerClassName="pb-20"
           >
             <DoctorBookingProcedure />
           </NecktieModal>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { necktieApi } from "redux/services/necktieApi";
+import { authSlice } from "redux/slices/authSlice";
 
 export const store = configureStore({
   reducer: {
-    [necktieApi.reducerPath]: necktieApi.reducer
+    [necktieApi.reducerPath]: necktieApi.reducer,
+    auth: authSlice.reducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(necktieApi.middleware)
 });

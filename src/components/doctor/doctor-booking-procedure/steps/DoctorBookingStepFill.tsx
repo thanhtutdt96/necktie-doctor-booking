@@ -3,19 +3,14 @@ import FormActions from "components/doctor/doctor-booking-procedure/common/FormA
 import FormErrorMessage from "components/doctor/doctor-booking-procedure/common/FormErrorMessage";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { BookingFormData } from "types/Booking";
-import { DoctorBookingStep } from "types/Common";
 
 interface Props {
   setCurrentFormData: Dispatch<SetStateAction<BookingFormData>>;
   currentFormData: BookingFormData;
-  setCurrentStep: Dispatch<SetStateAction<DoctorBookingStep>>;
+  onNextStep?: () => void;
 }
 
-const DoctorBookingStepFill: FC<Props> = ({
-  currentFormData,
-  setCurrentFormData,
-  setCurrentStep
-}) => {
+const DoctorBookingStepFill: FC<Props> = ({ currentFormData, setCurrentFormData, onNextStep }) => {
   const initialValues = {
     name: currentFormData.name
   };
@@ -36,7 +31,7 @@ const DoctorBookingStepFill: FC<Props> = ({
 
   const submitHandler = (formData: BookingFormData) => {
     setCurrentFormData({ ...currentFormData, ...formData });
-    setCurrentStep(DoctorBookingStep.APPOINTMENT);
+    onNextStep?.();
   };
 
   return (

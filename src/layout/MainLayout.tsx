@@ -8,10 +8,8 @@ const MainLayout = () => {
     <MainLayoutContext>
       <div className="App">
         <NecktieNavbar />
-        <div className="container mx-auto">
-          <Outlet />
-          <ToastContainer className="md:mt-12" hideProgressBar />
-        </div>
+        <Outlet />
+        <ToastContainer className="md:mt-12" hideProgressBar />
       </div>
     </MainLayoutContext>
   );

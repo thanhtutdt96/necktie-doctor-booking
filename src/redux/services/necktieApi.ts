@@ -1,18 +1,18 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { RootState } from "redux/store";
 import { Booking, BookingFormData } from "types/Booking";
 import { NecktieApiTagType } from "types/Common";
 import { Doctor } from "types/Doctor";
 
 const API_PATH = import.meta.env.VITE_API_PATH;
-const API_KEY = import.meta.env.VITE_API_KEY;
 
 export const necktieApi = createApi({
   reducerPath: "necktieApi",
   baseQuery: fetchBaseQuery({
     baseUrl: API_PATH,
-    prepareHeaders: (headers) => {
+    prepareHeaders: (headers, { getState }) => {
       headers.set("Content-Type", "application/json");
-      headers.set("x-api-key", API_KEY);
+      headers.set("x-api-key", (getState() as RootState).auth.user.token);
 
       return headers;
     }

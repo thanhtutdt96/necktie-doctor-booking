@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import classNames from "classnames";
@@ -20,7 +20,7 @@ const MyBookings = () => {
   const [activeAccordionId, setActiveAccordionId] = useState("");
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor>();
   const { initials, avatarColor } = useAvatarHelper(selectedDoctor?.name);
-  const { searchTerm, debouncedSearchTerm } = useMainLayoutContext();
+  const { searchTerm, debouncedSearchTerm, resetContextData } = useMainLayoutContext();
   const { formatDisplayDate, formatDisplayHourFromFloat } = useDateTimeHelper();
 
   const { data: bookings, isLoading } = useGetBookingsQuery();
@@ -58,6 +58,12 @@ const MyBookings = () => {
       .catch((error) => toast.error(error.data));
   };
 
+  useEffect(() => {
+    return () => {
+      resetContextData();
+    };
+  }, [resetContextData]);
+
   return (
     <div className="hero mt-3">
       <div className="hero-content w-full flex-col">
@@ -72,7 +78,7 @@ const MyBookings = () => {
         )}
 
         {searchTerm.length > 0 && filteredBookings?.length === 0 && (
-          <p className="text-sm">No doctors found</p>
+          <p className="text-sm">No bookings found</p>
         )}
 
         {filteredBookings.length > 0 && (

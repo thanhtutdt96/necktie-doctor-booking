@@ -75,7 +75,7 @@ const useDateTimeHelper = () => {
 
     return [
       formatDisplayHourFromFloat(parseFloat(maxStartOpeningHour?.start ?? "")),
-      formatDisplayHourFromFloat(parseFloat(maxEndOpeningHour?.start ?? ""))
+      formatDisplayHourFromFloat(parseFloat(maxEndOpeningHour?.end ?? ""))
     ];
   };
 

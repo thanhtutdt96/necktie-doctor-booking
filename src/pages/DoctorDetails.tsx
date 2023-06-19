@@ -23,7 +23,8 @@ import { DoctorScheduleDateItem } from "types/Doctor";
 const DoctorsDetails = () => {
   const { doctorId } = useParams();
   const navigate = useNavigate();
-  const { isModalVisible, setModalVisible, setSelectedDoctor } = useMainLayoutContext();
+  const { isModalVisible, setModalVisible, setSelectedDoctor, resetContextData } =
+    useMainLayoutContext();
 
   const { data: doctor, isLoading } = useGetDoctorByIdQuery(doctorId as string);
   const {
@@ -66,6 +67,12 @@ const DoctorsDetails = () => {
 
     setSelectedDoctor?.(doctor);
   }, [doctor, setSelectedDoctor]);
+
+  useEffect(() => {
+    return () => {
+      resetContextData();
+    };
+  }, [resetContextData]);
 
   return (
     <div className="container mx-auto">

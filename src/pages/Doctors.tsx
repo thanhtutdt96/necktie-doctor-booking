@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { NavLink } from "react-router-dom";
 import NecktieLoader from "components/common/NecktieLoader";
 import NecktieModal from "components/common/NecktieModal";
@@ -11,8 +11,14 @@ import { Doctor } from "types/Doctor";
 
 const Doctors = () => {
   const { data: doctors, isLoading } = useGetDoctorsQuery();
-  const { searchTerm, setSelectedDoctor, debouncedSearchTerm, isModalVisible, setModalVisible } =
-    useMainLayoutContext();
+  const {
+    searchTerm,
+    setSelectedDoctor,
+    debouncedSearchTerm,
+    isModalVisible,
+    setModalVisible,
+    resetContextData
+  } = useMainLayoutContext();
 
   const handleShowModal = useCallback(
     (doctor: Doctor) => {
@@ -37,6 +43,12 @@ const Doctors = () => {
       ].some((element) => element.includes(debouncedSearchTerm.toLowerCase().trim()))
     );
   }, [doctors, debouncedSearchTerm]);
+
+  useEffect(() => {
+    return () => {
+      resetContextData();
+    };
+  }, [resetContextData]);
 
   return (
     <div className="hero mt-3">

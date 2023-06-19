@@ -1,4 +1,12 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useState
+} from "react";
 import useDebounceValue from "hooks/useDebounceValue";
 import { Doctor } from "types/Doctor";
 
@@ -10,13 +18,15 @@ interface IMainLayoutContext {
   setSearchTerm?: Dispatch<SetStateAction<string>>;
   setSelectedDoctor?: Dispatch<SetStateAction<Doctor | undefined>>;
   setModalVisible?: Dispatch<SetStateAction<boolean>>;
+  resetContextData: () => void;
 }
 
 const mainLayoutContext = createContext<IMainLayoutContext>({
   searchTerm: "",
   debouncedSearchTerm: "",
   selectedDoctor: undefined,
-  isModalVisible: false
+  isModalVisible: false,
+  resetContextData: () => ({})
 });
 
 const MainLayoutContext = ({ children }: { children: ReactNode }) => {
@@ -24,6 +34,12 @@ const MainLayoutContext = ({ children }: { children: ReactNode }) => {
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor>();
   const [isModalVisible, setModalVisible] = useState(false);
   const debouncedSearchTerm = useDebounceValue(searchTerm, 500);
+
+  const resetContextData = useCallback(() => {
+    setSearchTerm("");
+    setSelectedDoctor(undefined);
+    setModalVisible(false);
+  }, []);
 
   return (
     <mainLayoutContext.Provider
@@ -34,7 +50,8 @@ const MainLayoutContext = ({ children }: { children: ReactNode }) => {
         debouncedSearchTerm,
         setSearchTerm,
         setSelectedDoctor,
-        setModalVisible
+        setModalVisible,
+        resetContextData
       }}
     >
       {children}
